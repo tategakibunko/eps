@@ -8,21 +8,22 @@ Labeled argument with type and default value are enabled in prepared statement.
 
 ```sql
 /* test.sql */
-prepare foo(age:int, name:text = "no name") as select * from people where age = {age} and name = {name};
+prepare foo(age:int, name:text = "no name") as
+select * from people where age = {age} and name = {name};
 ```
 
 ## Output
 
 You can output SQL or OCaml code.
 
-1. SQL
+### SQL
 
 ```sql
 /* eps.exe -input test.sql -format sql */
 prepare foo(int, text) as select * from people where age = $1 and name = $2;
 ```
 
-2. OCaml code
+### OCaml code
 
 ```ocaml
 /* eps.exe -input test.sql -format ocaml */
