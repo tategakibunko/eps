@@ -21,12 +21,12 @@ let () =
   end;
   let inchan = open_in !filename in
   let lexbuf = Lexing.from_channel inchan in
-  let ast = Parser.input Lexer.main lexbuf in
-  (match !format with
+  let ast = try_finally (fun () ->
+    Parser.input Lexer.main lexbuf
+  ) ~finally:(fun () -> close_in inchan) in
+  match !format with
     | "sql" -> print_endline @@ String.concat "\n" @@ List.map Emit.Sql.code ast
     | "ocaml" -> print_endline @@ String.concat "\n" @@ List.map Emit.OCaml.code ast
-    | other -> failwith @@ spf "undefined format:%s" other);
-  close_in inchan
-      
+    | other -> failwith @@ spf "undefined format:%s" other
 
 
